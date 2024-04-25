@@ -34,10 +34,6 @@ def get_input_and_parse(prompt):
         if not invalid_ip_addresses:  # If there are no invalid IPs, break the loop.
             break
 
-        # If there are invalid IPs, notify the user and continue the loop.
-        print("Invalid IPs or subnets: " + ", ".join(invalid_ip_addresses))
-        print("Please try again. Ctrl+C to exit.")
-
     return networks
 
 
@@ -131,7 +127,6 @@ def main(unittest=False):
     elif len(sys.argv) == 2:
         disallowed_input = sys.argv[1]
     else:
-        print("Wrong number of arguments provided, falling back to interactive mode.")
         # Reset inputs to fall back to interactive mode
         allowed_input = ""
         disallowed_input = ""
@@ -140,7 +135,6 @@ def main(unittest=False):
     if allowed_input:
         allowed_networks, invalid_allowed = parse_ip_networks(allowed_input)
         if invalid_allowed:
-            print("Invalid Allowed IPs: " + ", ".join(invalid_allowed))
             allowed_networks = (
                 []
             )  # Reset to empty to trigger interactive mode for allowed IPs
@@ -148,7 +142,6 @@ def main(unittest=False):
     if disallowed_input:  # This ensures it won't run if there's no disallowed_input
         disallowed_networks, invalid_disallowed = parse_ip_networks(disallowed_input)
         if invalid_disallowed:
-            print("Invalid Disallowed IPs: " + ", ".join(invalid_disallowed))
             disallowed_networks = (
                 []
             )  # Reset to empty to trigger interactive mode for disallowed IPs
@@ -174,15 +167,8 @@ def main(unittest=False):
         print("Error: No IPs are allowed based on the provided input.")
         sys.exit(1)
 
-    # Print the initial inputs and final result.
-    print("Input:")
-    print("AllowedIPs = " + ", ".join(map(str, allowed_networks)))
-    print("DisallowedIPs = " + ", ".join(map(str, disallowed_networks)))
-    print()
-    print("=======================")
-    print()
-    print("Output:")
-    print("AllowedIPs = " + ", ".join(map(str, sorted_networks)))
+    # Print just final result.
+    print("\n".join(map(str, sorted_networks)))
 
     if unittest:
         return sorted_networks
